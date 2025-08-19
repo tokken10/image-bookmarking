@@ -1,42 +1,63 @@
+/* app.css */
+
+/* Font family override for a clean modern look */
+body {
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background-color: #f9fafb; /* light gray background */
+  color: #111827; /* near-black text for readability */
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
+}
+
+/* Optional root container centering */
 #root {
-  max-width: 1280px;
+  max-width: 1600px;
   margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  padding: 2rem 1rem;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+/* Remove default button/anchor styles for consistency */
+button,
+input,
+textarea {
+  font-family: inherit;
+  font-size: 100%;
+  margin: 0;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+button {
+  cursor: pointer;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
+/* Remove all the outdated Vite/React logo styling */
+.logo,
+.logo.react,
+.card,
 .read-the-docs {
-  color: #888;
+  all: unset;
+}
+
+/* Smooth transition for scaling, shadow, hover */
+img,
+button {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Masonry layout compatibility */
+.break-inside-avoid {
+  break-inside: avoid;
+}
+
+/* Viewer modal enhancements (optional) */
+.modal-backdrop {
+  backdrop-filter: blur(6px);
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+/* Responsive utilities if needed (Tailwind should cover this) */
+@media (max-width: 640px) {
+  #root {
+    padding: 1.5rem 1rem;
+  }
 }
