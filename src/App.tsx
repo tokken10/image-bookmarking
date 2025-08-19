@@ -130,7 +130,7 @@ function App() {
     <div className="min-h-screen bg-gray-50 text-gray-900">
       {/* Header with Input Bar */}
       <header className="sticky top-0 z-10 bg-white/90 backdrop-blur border-b border-gray-200 shadow-sm">
-        <div className="mx-auto max-w-7xl px-4 py-4">
+        <div className="mx-auto max-w-[1200px] p-4">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">Image Gallery</h1>
           <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3">
             <div className="flex-1">
@@ -154,7 +154,7 @@ function App() {
       </header>
 
       {/* Main Content */}
-      <main className="mx-auto max-w-7xl px-4 py-6">
+      <main className="mx-auto max-w-[1200px] p-4">
         {images.length === 0 ? (
           <div className="grid place-items-center py-24 text-center text-gray-500">
             <div className="max-w-md">
@@ -168,7 +168,7 @@ function App() {
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-[720px] mx-auto">
             {images.map((img, idx) => (
               <div key={img.id} className="group relative aspect-square bg-gray-100 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-200">
                 {img.error ? (
