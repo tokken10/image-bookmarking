@@ -90,6 +90,17 @@ function App() {
     ))
   }, [])
 
+  const shuffleImages = useCallback(() => {
+    setImages(prev => {
+      const arr = [...prev]
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1))
+        ;[arr[i], arr[j]] = [arr[j], arr[i]]
+      }
+      return arr
+    })
+  }, [])
+
   const openViewer = useCallback((index: number) => {
     setViewerIndex(index)
   }, [])
@@ -146,16 +157,33 @@ function App() {
         <div className="max-w-5xl mx-auto px-4 py-6">
           <div className="flex items-center justify-between mb-6">
             <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">📸 My Image Wall</h1>
-            <button
-              type="button"
-              onClick={toggleDarkMode}
-              className="relative inline-flex h-6 w-11 items-center rounded-full bg-gray-200 dark:bg-gray-600 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-              aria-label="Toggle dark mode"
-            >
-              <span
-                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${isDarkMode ? 'translate-x-6' : 'translate-x-1'}`}
-              />
-            </button>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <svg className="w-5 h-5 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m8.364-8.364h-1M4.636 12H3m14.728 4.728l-.707-.707M6.343 6.343l-.707-.707m12.728 12.728l-.707-.707M6.343 17.657l-.707-.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+                <button
+                  type="button"
+                  onClick={toggleDarkMode}
+                  className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${isDarkMode ? 'bg-indigo-600' : 'bg-gray-300'}`}
+                  aria-label="Toggle dark mode"
+                >
+                  <span
+                    className={`inline-block h-6 w-6 transform rounded-full bg-white shadow transition-transform ${isDarkMode ? 'translate-x-7' : 'translate-x-1'}`}
+                  />
+                </button>
+                <svg className="w-5 h-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" />
+                </svg>
+              </div>
+              <button
+                type="button"
+                onClick={shuffleImages}
+                className="px-3 py-2 rounded-md bg-blue-600 text-white text-sm font-medium shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              >
+                Shuffle
+              </button>
+            </div>
           </div>
           <form
             onSubmit={handleSubmit}
