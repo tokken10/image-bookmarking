@@ -24,14 +24,18 @@ function App() {
         const parsed = JSON.parse(raw) as ImageItem[]
         setImages(parsed)
       }
-    } catch {}
+    } catch {
+      /* empty */
+    }
   }, [])
 
   // Persist to localStorage when images change
   useEffect(() => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(images))
-    } catch {}
+    } catch {
+      /* empty */
+    }
   }, [images])
 
   const isValidUrl = useMemo(() => {
@@ -185,10 +189,11 @@ function App() {
                     <button
                       onClick={() => openViewer(idx)}
                       className="block w-full h-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-lg"
+                      aria-label="View image"
                     >
                       <img
                         src={img.url}
-                        alt="Gallery image"
+                        alt={`Thumbnail ${idx + 1}`}
                         className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-105"
                         loading="lazy"
                         onError={() => handleImageError(img.id)}
