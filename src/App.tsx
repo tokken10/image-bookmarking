@@ -9,12 +9,36 @@ type ImageItem = {
 }
 
 const STORAGE_KEY = 'image_bookmarks_v1'
+const THEME_STORAGE_KEY = 'theme'
 
 function App() {
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem(THEME_STORAGE_KEY)
+      if (stored) return stored === 'dark'
+      return window.matchMedia('(prefers-color-scheme: dark)').matches
+    }
+    return false
+  })
   const [urlInput, setUrlInput] = useState('')
   const [images, setImages] = useState<ImageItem[]>([])
   const [viewerIndex, setViewerIndex] = useState<number | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  useEffect(() => {
+    const root = document.documentElement
+    if (isDarkMode) {
+      root.classList.add('dark')
+      localStorage.setItem(THEME_STORAGE_KEY, 'dark')
+    } else {
+      root.classList.remove('dark')
+      localStorage.setItem(THEME_STORAGE_KEY, 'light')
+    }
+  }, [isDarkMode])
+
+  const toggleDarkMode = useCallback(() => {
+    setIsDarkMode((d) => !d)
+  }, [])
 
   useEffect(() => {
     try {
@@ -23,13 +47,13 @@ function App() {
         const parsed = JSON.parse(raw) as ImageItem[]
         setImages(parsed)
       }
-    } catch {}
+    } catch { /* ignore */ }
   }, [])
 
   useEffect(() => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(images))
-    } catch {}
+    } catch { /* ignore */ }
   }, [images])
 
   const isValidUrl = useMemo(() => {
@@ -120,7 +144,19 @@ function App() {
       {/* Header */}
       <header className="sticky top-0 z-10 bg-white/80 dark:bg-gray-800/80 backdrop-blur border-b border-gray-200 dark:border-gray-700 shadow-sm">
         <div className="max-w-5xl mx-auto px-4 py-6">
-          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-6">📸 My Image Wall</h1>
+          <div className="flex items-center justify-between mb-6">
+            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">📸 My Image Wall</h1>
+            <button
+              type="button"
+              onClick={toggleDarkMode}
+              className="relative inline-flex h-6 w-11 items-center rounded-full bg-gray-200 dark:bg-gray-600 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              aria-label="Toggle dark mode"
+            >
+              <span
+                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${isDarkMode ? 'translate-x-6' : 'translate-x-1'}`}
+              />
+            </button>
+          </div>
           <form
             onSubmit={handleSubmit}
             className="flex flex-col sm:flex-row gap-3 bg-white dark:bg-gray-800 shadow-md rounded-xl p-4"
