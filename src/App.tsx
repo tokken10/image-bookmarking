@@ -24,6 +24,7 @@ function App() {
   const [images, setImages] = useState<ImageItem[]>([])
   const [viewerIndex, setViewerIndex] = useState<number | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [removingIds, setRemovingIds] = useState<string[]>([])
 
   useEffect(() => {
     const root = document.documentElement
@@ -80,9 +81,16 @@ function App() {
   }, [isValidUrl, urlInput, isSubmitting])
 
   const removeImage = useCallback((id: string) => {
-    setImages(prev => prev.filter(img => img.id !== id))
-    setViewerIndex(curr => (curr === null ? null : Math.min(curr, images.length - 2)))
-  }, [images.length])
+    setRemovingIds(prev => [...prev, id])
+    setTimeout(() => {
+      setImages(prev => {
+        const filtered = prev.filter(img => img.id !== id)
+        setViewerIndex(curr => (curr === null ? null : Math.min(curr, filtered.length - 1)))
+        return filtered
+      })
+      setRemovingIds(prev => prev.filter(rid => rid !== id))
+    }, 200)
+  }, [])
 
   const handleImageError = useCallback((id: string) => {
     setImages(prev => prev.map(img =>
@@ -179,7 +187,7 @@ function App() {
               <button
                 type="button"
                 onClick={shuffleImages}
-                className="px-3 py-2 rounded-md bg-blue-600 text-white text-sm font-medium shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                className="px-4 py-2 min-h-[44px] rounded-md bg-blue-600 text-white text-sm font-medium shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
                 Shuffle
               </button>
@@ -199,7 +207,7 @@ function App() {
             <button
               type="submit"
               disabled={!isValidUrl || isSubmitting}
-              className="px-6 py-3 bg-blue-600 text-white font-medium rounded-lg shadow hover:bg-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-6 py-3 min-h-[44px] bg-blue-600 text-white font-medium rounded-lg shadow hover:bg-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSubmitting ? 'Adding...' : 'Add Image'}
             </button>
@@ -211,15 +219,19 @@ function App() {
       <main className="max-w-6xl mx-auto px-4 py-8">
         {images.length === 0 ? (
           <div className="text-center text-gray-500 dark:text-gray-400 py-24">
+            <div className="text-6xl mb-4 animate-bounce">🌄</div>
             <p className="text-xl font-semibold mb-2">No images yet</p>
-            <p>Paste an image URL above and click "Add Image" to get started</p>
+            <p>Paste an image URL above and click \"Add Image\" to get started</p>
           </div>
         ) : (
-          <div className="columns-2 sm:columns-3 md:columns-4 lg:columns-5 gap-4 space-y-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
             {images.map((img, idx) => (
-              <div key={img.id} className="break-inside-avoid">
+              <div
+                key={img.id}
+                className={`relative group aspect-square rounded-xl overflow-hidden shadow bg-white dark:bg-gray-800 transition-all duration-300 hover:shadow-xl hover:z-10 hover:scale-105 ${removingIds.includes(img.id) ? 'animate-[fadeOut_0.2s_ease-in_forwards]' : 'animate-[fadeIn_0.3s_ease-out]'}`}
+              >
                 {img.error ? (
-                  <div className="w-full h-32 flex flex-col items-center justify-center text-center p-4 bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-700 rounded-lg shadow-sm">
+                  <div className="w-full h-full flex flex-col items-center justify-center text-center p-4 bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-700 rounded-lg shadow-sm">
                     <p className="text-sm font-medium text-red-600 dark:text-red-300">Failed to load image</p>
                     <button
                       onClick={() => removeImage(img.id)}
@@ -229,15 +241,15 @@ function App() {
                     </button>
                   </div>
                 ) : (
-                  <div className="relative group rounded-xl overflow-hidden shadow hover:shadow-xl bg-white dark:bg-gray-800 transition-all duration-200">
+                  <>
                     <button
                       onClick={() => openViewer(idx)}
-                      className="block w-full focus:outline-none"
+                      className="block w-full h-full focus:outline-none"
                     >
                       <img
                         src={img.url}
                         alt={`Image ${idx + 1}`}
-                        className="w-full object-cover rounded-lg transition-transform duration-200 group-hover:scale-[1.03]"
+                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                         loading="lazy"
                         onError={() => handleImageError(img.id)}
                       />
@@ -251,7 +263,7 @@ function App() {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                       </svg>
                     </button>
-                  </div>
+                  </>
                 )}
               </div>
             ))}
