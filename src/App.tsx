@@ -154,7 +154,7 @@ function App() {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
       {/* Header */}
       <header className="sticky top-0 z-10 bg-white/80 dark:bg-gray-800/80 backdrop-blur border-b border-gray-200 dark:border-gray-700 shadow-sm">
-        <div className="max-w-5xl mx-auto px-4 py-6">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between mb-6">
             <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">📸 My Image Wall</h1>
             <div className="flex items-center gap-4">
@@ -208,18 +208,18 @@ function App() {
       </header>
 
       {/* Gallery */}
-      <main className="max-w-6xl mx-auto px-4 py-8">
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {images.length === 0 ? (
           <div className="text-center text-gray-500 dark:text-gray-400 py-24">
             <p className="text-xl font-semibold mb-2">No images yet</p>
             <p>Paste an image URL above and click "Add Image" to get started</p>
           </div>
         ) : (
-          <div className="columns-2 sm:columns-3 md:columns-4 lg:columns-5 gap-4 space-y-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
             {images.map((img, idx) => (
-              <div key={img.id} className="break-inside-avoid">
+              <div key={img.id} className="aspect-square">
                 {img.error ? (
-                  <div className="w-full h-32 flex flex-col items-center justify-center text-center p-4 bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-700 rounded-lg shadow-sm">
+                  <div className="w-full h-full flex flex-col items-center justify-center text-center p-4 bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-700 rounded-lg shadow-sm">
                     <p className="text-sm font-medium text-red-600 dark:text-red-300">Failed to load image</p>
                     <button
                       onClick={() => removeImage(img.id)}
@@ -229,15 +229,15 @@ function App() {
                     </button>
                   </div>
                 ) : (
-                  <div className="relative group rounded-xl overflow-hidden shadow hover:shadow-xl bg-white dark:bg-gray-800 transition-all duration-200">
+                  <div className="relative group w-full h-full rounded-xl overflow-hidden shadow hover:shadow-xl bg-white dark:bg-gray-800 transition-all duration-200">
                     <button
                       onClick={() => openViewer(idx)}
-                      className="block w-full focus:outline-none"
+                      className="block w-full h-full focus:outline-none"
                     >
                       <img
                         src={img.url}
                         alt={`Image ${idx + 1}`}
-                        className="w-full object-cover rounded-lg transition-transform duration-200 group-hover:scale-[1.03]"
+                        className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-[1.03]"
                         loading="lazy"
                         onError={() => handleImageError(img.id)}
                       />
