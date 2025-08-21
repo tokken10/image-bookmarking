@@ -151,12 +151,14 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
+    <div className="min-h-screen antialiased font-sans bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-950 text-gray-900 dark:text-gray-100 transition-colors duration-300">
       {/* Header */}
-      <header className="sticky top-0 z-10 bg-white/80 dark:bg-gray-800/80 backdrop-blur border-b border-gray-200 dark:border-gray-700 shadow-sm">
+      <header className="sticky top-0 z-10 backdrop-blur-xl bg-white/60 dark:bg-gray-900/40 border-b border-white/20 dark:border-gray-700/60 shadow-md">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between mb-6">
-            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">📸 My Image Wall</h1>
+            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-500 to-purple-600 bg-clip-text text-transparent flex items-center gap-2">
+              <span>📸</span> Image Bookmarks
+            </h1>
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
                 <svg className="w-5 h-5 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -179,7 +181,7 @@ function App() {
               <button
                 type="button"
                 onClick={shuffleImages}
-                className="px-3 py-2 rounded-md bg-blue-600 text-white text-sm font-medium shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                className="px-3 py-2 rounded-md bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-sm font-medium shadow hover:from-indigo-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
                 Shuffle
               </button>
@@ -187,19 +189,19 @@ function App() {
           </div>
           <form
             onSubmit={handleSubmit}
-            className="flex flex-col sm:flex-row gap-3 bg-white dark:bg-gray-800 shadow-md rounded-xl p-4"
+            className="flex flex-col sm:flex-row gap-3 bg-white/80 dark:bg-gray-800/80 backdrop-blur rounded-xl p-4 shadow"
           >
             <input
               type="url"
               placeholder="Paste image URL (https://example.com/image.jpg)"
               value={urlInput}
               onChange={(e) => setUrlInput(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              className="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white/60 dark:bg-gray-900/40 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all shadow-sm"
             />
             <button
               type="submit"
               disabled={!isValidUrl || isSubmitting}
-              className="px-6 py-3 bg-blue-600 text-white font-medium rounded-lg shadow hover:bg-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-medium rounded-lg shadow hover:from-indigo-600 hover:to-purple-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSubmitting ? 'Adding...' : 'Add Image'}
             </button>
@@ -229,7 +231,7 @@ function App() {
                     </button>
                   </div>
                 ) : (
-                  <div className="relative group w-full h-full rounded-xl overflow-hidden shadow hover:shadow-xl bg-white dark:bg-gray-800 transition-all duration-200">
+                  <div className="relative group w-full h-full rounded-xl overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1 bg-white dark:bg-gray-800 transition-all duration-200">
                     <button
                       onClick={() => openViewer(idx)}
                       className="block w-full h-full focus:outline-none"
@@ -237,7 +239,7 @@ function App() {
                       <img
                         src={img.url}
                         alt={`Image ${idx + 1}`}
-                        className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-[1.03]"
+                        className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-105"
                         loading="lazy"
                         onError={() => handleImageError(img.id)}
                       />
@@ -262,7 +264,7 @@ function App() {
       {/* Modal Viewer */}
       {viewerIndex !== null && images[viewerIndex] && !images[viewerIndex].error && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 dark:bg-black/90"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 dark:bg-black/90 backdrop-blur-sm"
           onClick={closeViewer}
           onTouchStart={onTouchStart}
           onTouchEnd={onTouchEnd}
